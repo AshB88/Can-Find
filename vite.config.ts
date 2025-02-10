@@ -7,7 +7,13 @@ export default defineConfig({
   server: {
     port: process.env.PORT ? parseInt(process.env.PORT) : 3000, // Use Render's port if available
     open: true,
-    host: '0.0.0.0' // Ensure it binds to all network interfaces
+    host: '0.0.0.0', // Ensure it binds to all network interfaces    strictPort: true,
+    allowedHosts: ['.onrender.com'] // Allow all Render subdomains
+  },
+  preview: {
+    port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
+    host: '0.0.0.0',
+    allowedHosts: ['.onrender.com']
   }
 });
 
