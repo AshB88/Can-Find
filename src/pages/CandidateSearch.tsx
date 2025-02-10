@@ -4,177 +4,71 @@ import type Candidate from '../interfaces/Candidate.interface';
 import CandidateCard from '../components/CandidateCard';
 
 const CandidateSearch = () => {
-  const [currentCandidate, setCurrentCandidate] = useState<Candidate>({
-    avatar_url: '',
-    name: '',
-    location: '',
-    email: '',
-    company: '',
-    bio: '',
-    login: '',
-    html_url: ''
-  })
-
-  useEffect(() => {
-    const fetchCandidates = async () => {
-      const candidates = await searchGithub();
-      setCurrentCandidate(candidates[0]);
-    }
-
-    fetchCandidates();
-  }, [])
-
-  const handleSave = () => {
-    const savedCandidates = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
-    savedCandidates.push(currentCandidate);
-    localStorage.setItem('savedCandidates', JSON.stringify(savedCandidates));
-    fetchNextCandidate();
-  }
-
-  const handleSkip = () => {
-    fetchNextCandidate();
-  }
-
-  const fetchNextCandidate = async () => {
-    const candidates = await searchGithub();
-    setCurrentCandidate(candidates[0]);
-  }
-
-  return (
-    <div>
-      <h1>Candidate Search</h1>
-      <CandidateCard
-        currentCandidate={currentCandidate}
-        onSave={handleSave}
-        onSkip={handleSkip}
-      />
-    </div>
-  )
-
-};
-
-export default CandidateSearch;
-
-/*
-import { useState, useEffect } from 'react';
-import { searchGithub, searchGithubUser } from '../api/API';
-import type Candidate from '../interfaces/Candidate.interface';
-import CandidateCard from '../components/CandidateCard';
-
-const CandidateSearch = () => {
-  const [currentCandidate, setCurrentCandidate] = useState<Candidate>({
-    avatar_url: '',
-    name: '',
-    location: '',
-    email: '',
-    company: '',
-    bio: '',
-    login: '',
-    html_url: ''
-  })
-
-  useEffect(() => {
-    const fetchCandidates = async () => {
-      const candidates = await searchGithub();
-      setCurrentCandidate(candidates[0]);
-    }
-
-    fetchCandidates();
-  }, [])
-
-  const handleSave = () => {
-    const savedCandidates = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
-    savedCandidates.push(currentCandidate);
-    localStorage.setItem('savedCandidates', JSON.stringify(savedCandidates));
-    fetchNextCandidate();
-  }
-
-  const handleSkip = () => {
-    fetchNextCandidate();
-  }
-
-  const fetchNextCandidate = async () => {
-    const candidates = await searchGithub();
-    setCurrentCandidate(candidates[0]);
-  }
-
-  return (
-    <div>
-      <h1>Candidate Search</h1>
-      <CandidateCard
-        candidate={currentCandidate}
-        onSave={handleSave}
-        onSkip={handleSkip}
-      />
-    </div>
-  )
-
-};
-
-export default CandidateSearch;
-*/
-
-/*
-const CandidateSearch = () => {
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [currentCandidate, setCurrentCandidate] = useState<Candidate | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchCandidates = async () => {
-      try {
-        const candidates = await searchGithub();
-        setCurrentCandidate(candidates[0]);
-      } catch (err) {
-        setError('Failed to fetch candidates');
-      }
+      const fetchedCandidates = await searchGithub();
+      console.log('Fetched candidates:', fetchedCandidates);
+      setCandidates(fetchedCandidates);
+      setCurrentCandidate(fetchedCandidates[0]);
     };
 
     fetchCandidates();
   }, []);
 
+  useEffect(() => {
+    const fetchCandidateDetails = async () => {
+      if (currentCandidate?.login) {
+        const fetchedCandidate = await searchGithubUser(currentCandidate.login);
+        console.log('Fetched candidate details:', fetchedCandidate);
+        setCurrentCandidate(fetchedCandidate);
+      }
+    };
+
+    fetchCandidateDetails();
+  }, [currentCandidate?.login]);
+
   const handleSave = () => {
+    const savedCandidates = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
     if (currentCandidate) {
-      const savedCandidates = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
       savedCandidates.push(currentCandidate);
       localStorage.setItem('savedCandidates', JSON.stringify(savedCandidates));
-      fetchNextCandidate();
     }
+    fetchNextCandidate();
   };
 
   const handleSkip = () => {
     fetchNextCandidate();
   };
 
-  const fetchNextCandidate = async () => {
-    try {
-      const candidates = await searchGithub();
-      setCurrentCandidate(candidates[0]);
-    } catch (err) {
-      setError('Failed to fetch candidates');
+  const fetchNextCandidate = () => {
+    const nextIndex = currentIndex + 1;
+    if (nextIndex < candidates.length) {
+      setCurrentCandidate(candidates[nextIndex]);
+      setCurrentIndex(nextIndex);
+    } else {
+      console.log('No more candidates');
+      setCurrentCandidate(null);
     }
   };
 
-  if (error) {
-    return <div>{error}</div>;
-  } else {
-    return (
-      <div>
-        <h1>Candidate Search</h1>
-        {currentCandidate && (
-          <CandidateCard
-            candidate={currentCandidate} 
-            onSave={handleSave}
-            onSkip={handleSkip}
-          />
-        )}
-        {/*
-        <button onClick={handleSave}>Save</button>
-        <button onClick={handleSkip}>Skip</button>
-        }
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h1>Candidate Search</h1>
+      {!currentCandidate ? (
+        <h2 className="end">No More Candidates!</h2>
+      ) : (
+        <CandidateCard
+          currentCandidate={currentCandidate}
+          onSave={handleSave}
+          onSkip={handleSkip}
+        />
+      )}
+    </div>
+  );
 };
 
 export default CandidateSearch;
-*/
