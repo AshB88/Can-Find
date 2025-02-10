@@ -10,7 +10,7 @@ const Nav = () => {
         <ul>
           <li className="nav-item">
             <Link to="/" className={currentPage === '/' ? 'active' : 'nav-link'}>
-              Candidate Search
+              Home
             </Link>
           </li>
           <li className="nav-item">
