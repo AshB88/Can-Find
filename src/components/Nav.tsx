@@ -6,7 +6,7 @@ const Nav = () => {
 
   return (
     <div>
-      <nav>
+      <nav className="header">
         <ul>
           <li className="nav-item">
             <Link to="/" className={currentPage === '/' ? 'active' : 'nav-link'}>

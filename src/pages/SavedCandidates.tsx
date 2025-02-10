@@ -32,7 +32,7 @@ const SavedCandidates = () => {
             <tbody>
               {savedCandidates.map((candidate, index) => (
                 <tr key={index}>
-                  <td><img src={candidate.avatar_url} /></td>
+                  <td className="avatar"><img src={candidate.avatar_url} /></td>
                   <td>{candidate.name} ({candidate.login})</td>
                   <td>{candidate.location}</td>
                   <td>{candidate.email}</td>
