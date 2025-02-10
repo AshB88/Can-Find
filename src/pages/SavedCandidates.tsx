@@ -14,7 +14,7 @@ const SavedCandidates = () => {
     <>
       <h1>Potential Candidates</h1>
       {savedCandidates.map((candidate, index) => (
-        <div key={index}>
+        <div key={index} className="table">
           <img src={candidate.avatar_url} />
           <h2>{candidate.name}</h2>
           <p>{candidate.location}</p>
