@@ -49,12 +49,12 @@ Can-Find is a candidate search application that leverages the GitHub API to retr
 3. **Skip Candidates**:
     * Click the "-" button on a candidate card to move on to the next candidate.  
 
-**Screenshots**
+**Screenshots**:
 ![Can-Find Home Page](./src/assets/Can-Find%20Home.png)
 
 ![Can-Find Saved Candidates Page](./src/assets/Can-Find%20Saved.png)
 
-**Deployed application**
+**Deployed application**:
 The application is deployed on Render and can be accessed at the following URL:  
 * https://can-find.onrender.com/
 
