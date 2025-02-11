@@ -56,6 +56,7 @@ Can-Find is a candidate search application that leverages the GitHub API to retr
 
 **Deployed application**
 The application is deployed on Render and can be accessed at the following URL:  
+* https://can-find.onrender.com/
 
 
 
